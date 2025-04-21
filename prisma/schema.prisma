@@ -17,13 +17,37 @@ model Blogs_User{
   id Int @id @default(autoincrement())
   email String @unique
   password String
-  first_name String?
-  last_name String?
+  username String?
+  posts Blogs_Post[]
   role Role @default(User)
+  comments Blogs_Comment[]
   created_at DateTime @default(now())
 }
 
 enum Role{
   User
   Admin
+}
+
+model Blogs_Post{
+  id Int @id @default(autoincrement())
+  author_id Int
+  author Blogs_User @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  title String
+  content String
+  comments Blogs_Comment[]
+  is_published Boolean @default(false)
+  created_at DateTime @default(now())
+  last_edited DateTime @updatedAt
+}
+
+model Blogs_Comment{
+  id Int @id @default(autoincrement())
+  post_id Int
+  post Blogs_Post @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id Int
+  user Blogs_User? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  comment String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
