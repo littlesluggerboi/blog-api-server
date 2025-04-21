@@ -1,5 +1,5 @@
 import { Router } from "express";
-import prisma from "../prisma/prismaClient.js";
+import validator from "../validator/validator.js";
 import idValidationMiddleWare from "../middlewares/idValidation.js";
 import passport from "passport";
 import {
@@ -32,7 +32,7 @@ postRoutes.delete(
 );
 
 postRoutes.post(
-  "/new",
+  "/",
   passport.authenticate("jwt", { session: false }),
   postPostsValidator,
   validator,

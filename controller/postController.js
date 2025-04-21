@@ -1,12 +1,12 @@
-import prisma from "../prisma/prismaClient";
+import prisma from "../prisma/prismaClient.js";
 const isAuthorized = async (req, res, next) => {
   try {
-    const id = parseInt(req.params.id);
+    const {id} = req.params;
     const post = await prisma.blogs_Post.findUnique({ where: { id } });
     if (!post) return res.status(404).json({ message: "Resource not found" });
-    if (post.author_id !== req.user.id && res.user.role == "admin")
+    if (post.author_id != req.user.id && res.user.role != "admin")
       return res.status(401).json({ message: "Unauthorized" });
-    return next();
+    next();
   } catch (error) {
     return next(error);
   }
@@ -23,7 +23,7 @@ const getPosts = async (req, res, next) => {
 
 const getPost = async (req, res, next) => {
   try {
-    const id = parseInt(req.params.id);
+    const {id} = req.params;
     const post = await prisma.blogs_Post.findUnique({ where: { id } });
     if (!post) return res.status(400).json({ message: "Resource not found." });
     return res.json({ post });
@@ -34,7 +34,7 @@ const getPost = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
   try {
-    const id = parseInt(req.params.id);
+    const {id} = req.params;
     const data = req.body;
     const post = await prisma.blogs_Post.update({ where: { id }, data });
     res.json({ message: "Successfully updated a post.", post });
@@ -45,7 +45,7 @@ const updatePost = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
   try {
-    const id = parseInt(req.params.id);
+    const {id} = req.params;
     const post = await prisma.blogs_Post.delete({ where: { id } });
     res.json({ message: "Successfully delete a post.", post });
   } catch (error) {
