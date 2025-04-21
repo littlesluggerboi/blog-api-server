@@ -1,0 +1,29 @@
+{
+  "name": "blog-api-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Back-end for blogs api.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlesluggerboi/blog-api-server.git"
+  },
+  "author": "Aeron C. Tayaotao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/littlesluggerboi/blog-api-server/issues"
+  },
+  "homepage": "https://github.com/littlesluggerboi/blog-api-server#readme",
+  "dependencies": {
+    "brcypt": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "prisma": "^6.6.0"
+  }
+}
