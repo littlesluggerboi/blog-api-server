@@ -1,7 +1,9 @@
 import { param, validationResult } from "express-validator";
 
 const idValidationMiddleWare = [
-  param("id").isInt(),
+  param("id")
+    .isInt()
+    .customSanitizer((id) => parseInt(id)),
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
