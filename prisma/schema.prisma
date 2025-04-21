@@ -46,7 +46,7 @@ model Blogs_Comment{
   post_id Int
   post Blogs_Post @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id Int
-  user Blogs_User? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user Blogs_User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   comment String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
