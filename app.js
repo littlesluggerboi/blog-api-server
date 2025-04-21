@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import authRoutes from "./routes/authRoutes.js";
-import "./configs/passportConfig.js"
+import "./configs/passportConfig.js";
+import postRoutes from "./routes/postRoutes.js";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", authRoutes);
+app.use("/posts", postRoutes);
 
 app.use(async (err, req, res, next) => {
   console.log(err);
@@ -19,9 +21,9 @@ app.use(async (err, req, res, next) => {
 });
 
 app.use(async (req, res, next) => {
-    res.status(404).send("Not Found")
-})
+  res.status(404).send("Not Found");
+});
 
-app.listen(PORT, ()=>{
-    console.log(`Listening at port: ${PORT}`)
-})
+app.listen(PORT, () => {
+  console.log(`Listening at port: ${PORT}`);
+});
