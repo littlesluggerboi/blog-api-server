@@ -3,6 +3,7 @@ import express from "express";
 import authRoutes from "./routes/authRoutes.js";
 import "./configs/passportConfig.js";
 import postRoutes from "./routes/postRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", authRoutes);
 app.use("/posts", postRoutes);
+app.use("/comments", commentRoutes);
 
 app.use(async (err, req, res, next) => {
   console.log(err);
