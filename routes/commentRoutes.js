@@ -12,11 +12,13 @@ const commentRoutes = Router();
 
 commentRoutes.get("/", commentController.getComments);
 
+commentRoutes.get("/count", commentController.getCommentsCount);
+
 commentRoutes.get("/:id", idValidationMiddleWare, commentController.getComment);
 
 commentRoutes.post(
   "/",
-  passport.authenticate("jwt"),
+  passport.authenticate("jwt", { session: false }),
   commentsPostValidator,
   validator,
   commentController.postComment
@@ -24,7 +26,7 @@ commentRoutes.post(
 
 commentRoutes.put(
   "/:id",
-  passport.authenticate("jwt"),
+  passport.authenticate("jwt", { session: false }),
   idValidationMiddleWare,
   commentController.isAuthorized,
   commentsUpdateValidator,
@@ -33,7 +35,7 @@ commentRoutes.put(
 
 commentRoutes.delete(
   "/:id",
-  passport.authenticate("jwt"),
+  passport.authenticate("jwt", { session: false }),
   idValidationMiddleWare,
   commentController.isAuthorized,
   commentController.deleteComment

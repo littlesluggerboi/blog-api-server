@@ -30,14 +30,17 @@ passport.use(
       try {
         const result = await prisma.blogs_User.findUnique({
           where: { email: emailArg },
+          omit: {
+            created_at: true,
+          },
         });
         if (!result) {
-          return done(null, false, { message: "User not found." });
+          return done(null, false, { email: "User not found." });
         }
         const { password, ...user } = result;
         const match = await bcrypt.compare(passwordArg, password);
         if (!match) {
-          return done(null, false, { message: "Wrong password." });
+          return done(null, false, { password: "Wrong password." });
         }
         return done(null, user, { message: "Login Successful!" });
       } catch (error) {

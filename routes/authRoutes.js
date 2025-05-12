@@ -20,4 +20,5 @@ authRoutes.post(
   authController.postLogin
 );
 
+
 export default authRoutes;

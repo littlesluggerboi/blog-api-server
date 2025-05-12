@@ -10,9 +10,17 @@ import postController from "../controller/postController.js";
 
 const postRoutes = Router();
 
-postRoutes.get("/", postController.getPosts);
+postRoutes.get("/", postController.conditionalUser, postController.getPosts);
 
-postRoutes.get("/:id", idValidationMiddleWare, postController.getPost);
+postRoutes.get(
+  "/myposts",
+  passport.authenticate("jwt", { session: false }),
+  postController.getMyPosts
+);
+
+postRoutes.get("/count", postController.getPostsCount);
+
+postRoutes.get("/:id", idValidationMiddleWare, postController.conditionalUser, postController.getPost);
 
 postRoutes.put(
   "/:id",
@@ -20,6 +28,7 @@ postRoutes.put(
   passport.authenticate("jwt", { session: false }),
   postController.isAuthorized,
   updatePostValidator,
+  validator,
   postController.updatePost
 );
 

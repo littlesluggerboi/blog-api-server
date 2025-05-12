@@ -1,4 +1,3 @@
-
 import prisma from "../prisma/prismaClient.js";
 const isAuthorized = async (req, res, next) => {
   try {
@@ -6,7 +5,7 @@ const isAuthorized = async (req, res, next) => {
     const comment = await prisma.blogs_Comment.findUnique({ where: { id } });
     if (!comment)
       return res.status(404).json({ message: "Resource not found" });
-    if (comment.user_id != req.user.id && req.user.role != "admin")
+    if (comment.user_id != req.user.id && req.user.role != "Admin")
       return res.status(401).json({ message: "Unauthorized" });
     next();
   } catch (error) {
@@ -16,7 +15,9 @@ const isAuthorized = async (req, res, next) => {
 
 const getComments = async (req, res, next) => {
   try {
-    const comments = await prisma.blogs_Comment.findMany();
+    const comments = await prisma.blogs_Comment.findMany({
+      include: { user: { select: { username: true, email: true } } },
+    });
     res.json({ comments });
   } catch (error) {
     next(error);
@@ -71,6 +72,15 @@ const deleteComment = async (req, res, next) => {
   }
 };
 
+const getCommentsCount = async (req, res, next) => {
+  try {
+    const commentsCount = await prisma.blogs_Comment.count();
+    res.json({ count: commentsCount });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   isAuthorized,
   getComments,
@@ -78,4 +88,5 @@ export default {
   postComment,
   updateComment,
   deleteComment,
+  getCommentsCount,
 };

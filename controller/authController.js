@@ -5,13 +5,19 @@ import bcrypt from "bcrypt";
 
 const postSignup = async (req, res, next) => {
   try {
-    const { password, ...data } = req.body;
+    const { password, email, username } = req.body;
     const hash = await bcrypt.hash(password, 10);
-    data.password = hash;
-    await prisma.blogs_User.create({
-      data: data,
+    const user = await prisma.blogs_User.create({
+      data: { email, password: hash, username },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        role: true,
+      },
     });
-    res.json({ message: "Sign up successful." });
+    const token = jwt.sign({ user }, process.env.SECRET);
+    res.json({ token, ...user });
   } catch (error) {
     next(error);
   }
@@ -21,13 +27,11 @@ const postLogin = async (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     try {
       if (err) return next(err);
-      if (!user) return res.status(401).json({ info });
+      if (!user) return res.status(401).json({ errors: info });
       req.login(user, { session: false }, async (error) => {
         if (error) return next(error);
-        const token = jwt.sign({ user }, process.env.SECRET, {
-          expiresIn: 60 * 60 * 24,
-        });
-        return res.json({ token });
+        const token = jwt.sign({ user }, process.env.SECRET);
+        return res.json({ token, ...user });
       });
     } catch (error) {
       return next(error);
